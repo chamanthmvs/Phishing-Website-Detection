@@ -17,6 +17,4 @@ This project employs Machine-learning technique for modelling the prediction tas
 4. _Evaluating the model_
 5. _Testing the model_
 
-**Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
