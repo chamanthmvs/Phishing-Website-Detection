@@ -20,7 +20,7 @@ This project employs Machine-learning technique for modelling the prediction tas
   1. Training the model with Decision Tree C5.0 algorithm
      - Calculating the accuracy of the model
   2. Training the model with Random Forest model 
-    - Calculating the accuracy of the model
+     - Calculating the accuracy of the model
   By evaluating the performance of the model, choosing the best fit for this problem
   
    **Any Classification Algorithm can be used such as SVM,KNN,Naive Bayes but we are testing only with Decision Tree C5.0 and Random     Forest because many citations on this project has stated that Random Forest is the best fit**
