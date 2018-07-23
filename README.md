@@ -17,16 +17,17 @@ This project employs Machine-learning technique for modelling the prediction tas
   - Filtering the extracted features data.(Removing unnecessary columns for the training the model)
 
 3. _Training the model_
-  1. Training the model with Decision Tree C5.0 algorithm
+   
+   1. Training the model with Decision Tree C5.0 algorithm
      - Calculating the accuracy of the model
-  2. Training the model with Random Forest model 
+   2. Training the model with Random Forest model 
      - Calculating the accuracy of the model
   By evaluating the performance of the model, choosing the best fit for this problem
   
    **Any Classification Algorithm can be used such as SVM,KNN,Naive Bayes but we are testing only with Decision Tree C5.0 and Random     Forest because many citations on this project has stated that Random Forest is the best fit**
 
 4. _Evaluating the model and Testing the model_
-    -By providing input(url) either from desktop app or web-app,classifying whether it is legitimate or phishing
+      -By providing input(url) either from desktop app or web-app,classifying whether it is legitimate or phishing
     
 
 
