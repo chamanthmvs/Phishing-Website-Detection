@@ -23,7 +23,7 @@ This project employs Machine-learning technique for modelling the prediction tas
     - Calculating the accuracy of the model
   By evaluating the performance of the model, choosing the best fit for this problem
   
-    **Any Classification Algorithm can be used such as SVM,KNN,Naive Bayes but we are testing only with Decision Tree C5.0 and Random     Forest because many citations on this project has stated that Random Forest is the best fit**
+   **Any Classification Algorithm can be used such as SVM,KNN,Naive Bayes but we are testing only with Decision Tree C5.0 and Random     Forest because many citations on this project has stated that Random Forest is the best fit**
 
 4. _Evaluating the model and Testing the model_
     -By providing input(url) either from desktop app or web-app,classifying whether it is legitimate or phishing
