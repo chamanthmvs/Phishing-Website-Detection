@@ -14,7 +14,7 @@ This project employs Machine-learning technique for modelling the prediction tas
 1. _Feature Extraction_
   
 2. _Data Preprocessing_
-  - Filtering the extracted features data.(Removing unnecessary columns for the training the model)
+    - Filtering the extracted features data.(Removing unnecessary columns for the training the model)
 
 3. _Training the model_
    
