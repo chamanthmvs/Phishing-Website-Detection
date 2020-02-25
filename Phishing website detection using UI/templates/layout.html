@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>{% block title %}{% endblock title %}</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" />
+
+</head>
+<body>
+	<div class="container">
+		{% include 'includes/_navbar.html'%}
+		{% block body %}{% endblock body%}
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+	</div>
+</body>
+</html>
