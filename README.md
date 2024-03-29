@@ -1,4 +1,4 @@
-https://chamanthmvs.github.io/Phishing-Website-Detection/
+https://chandru.github.io/Phishing-Website-Detection/
 
 ## Phishing-Website-Detection
 
