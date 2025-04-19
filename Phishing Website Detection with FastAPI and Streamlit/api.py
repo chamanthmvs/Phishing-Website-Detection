@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import pickle
-import FeatureExtraction
+import featureExtraction
 
 # Load the model (make sure you have the correct path to the model file)
 RFmodel = pickle.load(open('RandomForestModel.sav', 'rb'))
@@ -19,7 +19,7 @@ async def predict(request: URLRequest):
     print(f"Received URL: {url}")
     
     # Feature extraction
-    data = FeatureExtraction.getAttributess(url)
+    data = featureExtraction.getAttributess(url)
     
     # Prediction
     predicted_value = RFmodel.predict(data)
