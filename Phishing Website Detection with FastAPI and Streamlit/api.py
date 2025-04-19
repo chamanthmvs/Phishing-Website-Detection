@@ -24,7 +24,7 @@ async def predict(request: URLRequest):
     # Prediction
     predicted_value = RFmodel.predict(data)
     
-    # Return response
+    # return response
     if predicted_value == 0:
         return {"prediction": "Legitimate"}
     else:
