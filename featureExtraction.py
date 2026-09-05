@@ -8,7 +8,7 @@ import whois
 import urllib.request
 import time
 import socket
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from datetime import datetime
 
 
@@ -52,7 +52,7 @@ class FeatureExtraction:
             response = urllib.request.urlopen(f"http://data.alexa.com/data?cli=10&dat=s&url={url}")
             rank = BeautifulSoup(response.read(), "xml").find("REACH")["RANK"]
             return 0 if int(rank) < 100000 else 2
-        except (TypeError, HTTPError):
+        except (TypeError, HTTPError, URLError):
             return 1
 
     def domain_registration_length(self, url):
@@ -116,18 +116,18 @@ class FeatureExtraction:
 def getAttributess(url):
     fe = FeatureExtraction()
     features = {
-        'Domain': fe.getDomain(url),
-        'Path': fe.getPath(url),
-        'URL_Length': fe.long_url(url),
-        'Redirection_//_symbol': fe.redirection(url),
+        'Having_@_symbol': fe.have_at_symbol(url),
+        'Having_IP': fe.havingIP(url),
         'Prefix_suffix_separation': fe.prefix_suffix_separation(url),
+        'Redirection_//_symbol': fe.redirection(url),
         'Sub_domains': fe.sub_domains(url),
+        'URL_Length': fe.long_url(url),
+        'Age_Domain': fe.age_domain(url),
+        'DNS_Record': fe.dns_record(url),
+        'Domain_Registration_Length': fe.domain_registration_length(url),
+        'HTTPS_Token': fe.https_token(url),
+        'Statistical_Report': fe.statistical_report(url),
         'Tiny_URL': fe.shortening_service(url),
         'Web_Traffic': fe.web_traffic(url),
-        'Domain_Registration_Length': fe.domain_registration_length(url),
-        'DNS_Record': fe.dns_record(url),
-        'Statistical_Report': fe.statistical_report(url),
-        'Age_Domain': fe.age_domain(url),
-        'HTTPS_Token': fe.https_token(url),
     }
     return pd.DataFrame([features])
