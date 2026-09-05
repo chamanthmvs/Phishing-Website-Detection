@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Phishing Website Detection with machine learning and Streamlit.">
+  <title>Phishing Website Detection</title>
+  <style>
+    :root {
+      --night: #101820;
+      --ink: #17252b;
+      --muted: #63747a;
+      --paper: #f5f8f4;
+      --mint: #d8f0e4;
+      --green: #1f8068;
+      --green-dark: #155542;
+      --coral: #e47b5b;
+      --line: rgba(23, 37, 43, 0.14);
+      --shadow: 0 24px 70px rgba(16, 24, 32, 0.16);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; }
+
+    .topbar {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      margin: 0 auto;
+      max-width: 1180px;
+      padding: 1.4rem 2rem;
+    }
+
+    .brand {
+      align-items: center;
+      display: flex;
+      font-family: "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 0.86rem;
+      font-weight: 800;
+      gap: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      align-items: center;
+      background: var(--green);
+      border-radius: 50%;
+      color: white;
+      display: inline-flex;
+      font-size: 0.86rem;
+      height: 2rem;
+      justify-content: center;
+      width: 2rem;
+    }
+
+    nav { display: flex; gap: 1.4rem; }
+
+    nav a {
+      color: var(--muted);
+      font-family: "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 0.82rem;
+      text-decoration: none;
+    }
+
+    nav a:hover { color: var(--green-dark); }
+
+    .hero {
+      background:
+        linear-gradient(115deg, rgba(216, 240, 228, 0.96), rgba(245, 248, 244, 0.85) 58%, rgba(228, 123, 91, 0.18)),
+        repeating-linear-gradient(135deg, transparent 0, transparent 44px, rgba(31, 128, 104, 0.07) 45px, transparent 46px);
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      border: 1px solid rgba(31, 128, 104, 0.24);
+      border-radius: 50%;
+      content: "";
+      height: 28rem;
+      position: absolute;
+      right: -8rem;
+      top: -12rem;
+      width: 28rem;
+    }
+
+    .hero-inner {
+      display: grid;
+      gap: 4rem;
+      grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+      margin: 0 auto;
+      max-width: 1180px;
+      padding: 7rem 2rem 6rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      color: var(--green-dark);
+      font-family: "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(3.4rem, 8vw, 7.2rem);
+      font-weight: 400;
+      letter-spacing: -0.055em;
+      line-height: 0.91;
+      margin: 1rem 0 1.5rem;
+      max-width: 760px;
+    }
+
+    .hero-copy {
+      color: var(--muted);
+      font-size: clamp(1.08rem, 2vw, 1.35rem);
+      max-width: 600px;
+    }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 2rem; }
+
+    .button {
+      border: 1px solid var(--green-dark);
+      border-radius: 999px;
+      display: inline-block;
+      font-family: "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.78rem 1.15rem;
+      text-decoration: none;
+    }
+
+    .button.primary { background: var(--green-dark); color: white; }
+    .button.secondary { color: var(--green-dark); }
+    .button:hover { transform: translateY(-2px); }
+
+    .scan-card {
+      align-self: end;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(23, 37, 43, 0.16);
+      box-shadow: var(--shadow);
+      padding: 1.4rem;
+      transform: rotate(2deg);
+    }
+
+    .scan-card-top {
+      align-items: center;
+      display: flex;
+      font-family: "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      justify-content: space-between;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .status { color: var(--green); }
+
+    .url-box {
+      background: var(--night);
+      color: #d8f0e4;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.82rem;
+      margin: 1.2rem 0;
+      padding: 1.15rem;
+      word-break: break-word;
+    }
+
+    .result-line {
+      align-items: baseline;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      padding-top: 0.85rem;
+    }
+
+    .result-line strong { color: var(--green-dark); font-size: 1.35rem; }
+    .result-line span { color: var(--muted); font-family: "Helvetica Neue", Helvetica, sans-serif; font-size: 0.78rem; }
+
+    .section {
+      margin: 0 auto;
+      max-width: 1180px;
+      padding: 6rem 2rem;
+    }
+
+    .section-heading {
+      align-items: end;
+      display: flex;
+      gap: 2rem;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+    }
+
+    h2 { font-size: clamp(2.1rem, 4vw, 3.6rem); font-weight: 400; letter-spacing: -0.04em; line-height: 1; margin: 0; }
+    .section-heading p { color: var(--muted); margin: 0; max-width: 420px; }
+
+    .story {
+      display: grid;
+      gap: 3rem;
+      grid-template-columns: 0.8fr 1.2fr;
+    }
+
+    .story-lead { color: var(--green-dark); font-size: 1.45rem; line-height: 1.25; }
+    .story p { margin-top: 0; }
+
+    .feature-grid {
+      display: grid;
+      gap: 1px;
+      grid-template-columns: repeat(3, 1fr);
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+
+    .feature {
+      background: var(--paper);
+      min-height: 175px;
+      padding: 1.5rem;
+    }
+
+    .feature-number { color: var(--coral); font-family: "Helvetica Neue", Helvetica, sans-serif; font-size: 0.75rem; font-weight: 800; }
+    .feature h3 { font-size: 1.35rem; font-weight: 400; margin: 1.7rem 0 0.5rem; }
+    .feature p { color: var(--muted); font-family: "Helvetica Neue", Helvetica, sans-serif; font-size: 0.88rem; margin: 0; }
+
+    .workflow {
+      background: var(--night);
+      color: white;
+      max-width: none;
+    }
+
+    .workflow-inner { margin: 0 auto; max-width: 1180px; padding: 6rem 2rem; }
+    .workflow h2 { color: white; }
+    .workflow .section-heading p { color: #adbfba; }
+
+    .steps { display: grid; gap: 1px; grid-template-columns: repeat(4, 1fr); margin-top: 3rem; }
+    .step { border-left: 1px solid rgba(216, 240, 228, 0.22); padding: 0 1.3rem; }
+    .step:first-child { border-left: 0; padding-left: 0; }
+    .step-number { color: #a9e1ca; font-family: "Helvetica Neue", Helvetica, sans-serif; font-size: 0.78rem; font-weight: 800; }
+    .step h3 { font-size: 1.2rem; font-weight: 400; margin: 1.5rem 0 0.5rem; }
+    .step p { color: #adbfba; font-family: "Helvetica Neue", Helvetica, sans-serif; font-size: 0.86rem; margin: 0; }
+
+    .resources { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); }
+    .resource { border-top: 2px solid var(--green); padding-top: 1rem; text-decoration: none; }
+    .resource h3 { font-size: 1.25rem; font-weight: 400; margin: 0 0 0.35rem; }
+    .resource p { color: var(--muted); font-family: "Helvetica Neue", Helvetica, sans-serif; font-size: 0.86rem; margin: 0; }
+
+    footer {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-family: "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 0.8rem;
+      padding: 1.5rem 2rem;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      nav { display: none; }
+      .hero-inner, .story { grid-template-columns: 1fr; }
+      .hero-inner { gap: 2rem; padding-top: 5rem; }
+      .scan-card { max-width: 420px; transform: none; }
+      .section-heading { align-items: start; flex-direction: column; }
+      .feature-grid, .steps, .resources { grid-template-columns: 1fr; }
+      .step, .step:first-child { border-left: 0; border-top: 1px solid rgba(216, 240, 228, 0.22); padding: 1.3rem 0 0; }
+      .step:first-child { border-top: 0; padding-top: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top"><span class="brand-mark">P</span> PhishGuard</a>
+    <nav aria-label="Primary navigation">
+      <a href="#about">About</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#resources">Resources</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-inner">
+        <div>
+          <div class="eyebrow">Machine learning / URL intelligence</div>
+          <h1>Check a link before you trust it.</h1>
+          <p class="hero-copy">Phishing Website Detection analyzes URL signals with a trained Random Forest model and turns a complex classification workflow into a clear, practical scan.</p>
+          <div class="actions">
+            <a class="button primary" href="https://github.com/chamanthmvs/Phishing-Website-Detection">View on GitHub</a>
+            <a class="button secondary" href="#workflow">Explore the workflow</a>
+          </div>
+        </div>
+
+        <aside class="scan-card" aria-label="Example scan result">
+          <div class="scan-card-top"><span>Example scan</span><span class="status">● Model ready</span></div>
+          <div class="url-box">https://secure-account.example.com/login</div>
+          <div class="result-line"><span>Classification</span><strong>Phishing</strong></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section-heading">
+        <h2>Why phishing detection matters</h2>
+        <p>Trust can be engineered into a page. URL evidence gives users and systems another signal before sensitive information is shared.</p>
+      </div>
+      <div class="story">
+        <p class="story-lead">Phishing websites imitate trusted organizations to persuade people to reveal passwords, account details, or other private information.</p>
+        <div>
+          <p>Financial services and online platforms process a large volume of real-time transactions, making them attractive targets for fraud and social engineering. Attackers continuously change their techniques, create convincing replicas, and distribute them through emails, messages, and misleading links.</p>
+          <p>This project explores how measurable URL characteristics can help distinguish legitimate websites from potentially phishing websites. It is designed for learning, experimentation, and responsible security research.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <h2>Signals behind the prediction</h2>
+        <p>The model works with a compact numeric representation of URL behavior and domain information.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature"><div class="feature-number">01</div><h3>URL structure</h3><p>Length, redirects, subdomains, IP addresses, and prefix or suffix patterns.</p></article>
+        <article class="feature"><div class="feature-number">02</div><h3>Trust indicators</h3><p>HTTPS tokens, shortening services, DNS records, and statistical reputation signals.</p></article>
+        <article class="feature"><div class="feature-number">03</div><h3>Domain history</h3><p>Domain age and registration information that can reveal suspicious patterns.</p></article>
+      </div>
+    </section>
+
+    <section class="workflow" id="workflow">
+      <div class="workflow-inner">
+        <div class="section-heading">
+          <h2>From URL to result</h2>
+          <p>The same documented workflow powers the Streamlit interface and the training notebooks.</p>
+        </div>
+        <div class="steps">
+          <article class="step"><div class="step-number">01</div><h3>Enter a URL</h3><p>Provide a complete website URL in the Streamlit scanner.</p></article>
+          <article class="step"><div class="step-number">02</div><h3>Extract signals</h3><p>Convert URL and domain characteristics into numeric features.</p></article>
+          <article class="step"><div class="step-number">03</div><h3>Run the model</h3><p>Pass the feature vector to the saved Random Forest classifier.</p></article>
+          <article class="step"><div class="step-number">04</div><h3>Inspect the result</h3><p>Review the Legitimate or Phishing classification and extracted values.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="resources">
+      <div class="section-heading">
+        <h2>Explore the project</h2>
+        <p>The repository keeps the application, training material, and source datasets easy to inspect.</p>
+      </div>
+      <div class="resources">
+        <a class="resource" href="https://github.com/chamanthmvs/Phishing-Website-Detection/blob/master/README.md"><h3>Documentation ↗</h3><p>Setup instructions, project context, and reproducibility notes.</p></a>
+        <a class="resource" href="https://github.com/chamanthmvs/Phishing-Website-Detection/tree/master/notebooks"><h3>Training notebooks ↗</h3><p>Feature extraction and model-training experiments.</p></a>
+        <a class="resource" href="https://github.com/chamanthmvs/Phishing-Website-Detection/tree/master/raw_datasets"><h3>Raw datasets ↗</h3><p>Source URL lists for further experimentation.</p></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>Built by chamanthmvs · For educational and experimental use</footer>
+</body>
+</html>
