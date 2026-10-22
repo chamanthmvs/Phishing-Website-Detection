@@ -1,14 +1,14 @@
 # coding: utf-8
 
 import pandas as pd
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlencode
 import re
 from bs4 import BeautifulSoup
 import whois
 import urllib.request
+import json
 import time
 import socket
-from urllib.error import HTTPError, URLError
 from datetime import datetime
 
 
@@ -48,11 +48,17 @@ class FeatureExtraction:
         return 1 if re.search(pattern, url) else 0
 
     def web_traffic(self, url):
+        # data.alexa.com no longer exists (Alexa was retired in 2022), so the rank comes from the
+        # free NetAPI Top 1M (no API key). Same encoding: 0 = rank < 100,000, 2 = ranked lower, 1 = not ranked
         try:
-            response = urllib.request.urlopen(f"http://data.alexa.com/data?cli=10&dat=s&url={url}")
-            rank = BeautifulSoup(response.read(), "xml").find("REACH")["RANK"]
+            domain = urlparse(url).netloc.split(":")[0]
+            query = urlencode({"method": "domain-rank", "domain": domain})
+            response = urllib.request.urlopen(f"https://netapi.com/api-json/?{query}", timeout=10)
+            rank = json.loads(response.read()).get("rank")
+            if rank is None:
+                return 1
             return 0 if int(rank) < 100000 else 2
-        except (TypeError, HTTPError, URLError):
+        except (TypeError, ValueError, OSError):
             return 1
 
     def domain_registration_length(self, url):
