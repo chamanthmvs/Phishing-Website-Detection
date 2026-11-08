@@ -294,7 +294,7 @@
         <div>
           <div class="eyebrow">Machine learning / URL intelligence</div>
           <h1>Check a link before you trust it.</h1>
-          <p class="hero-copy">Phishing Website Detection analyzes URL signals with a trained Random Forest model and turns a complex classification workflow into a clear, practical scan.</p>
+          <p class="hero-copy">Phishing Website Detection reads 20 signals straight from a URL and runs a trained Random Forest model &mdash; no request to the site itself &mdash; turning a complex classification workflow into a clear, practical scan.</p>
           <div class="actions">
             <a class="button primary" href="https://github.com/chamanthmvs/Phishing-Website-Detection">View on GitHub</a>
             <a class="button secondary" href="#workflow">Explore the workflow</a>
@@ -326,12 +326,25 @@
     <section class="section">
       <div class="section-heading">
         <h2>Signals behind the prediction</h2>
-        <p>The model works with a compact numeric representation of URL behavior and domain information.</p>
+        <p>Twenty lexical features &mdash; computed purely from the URL text, so every scan is fast, private, and reproducible.</p>
       </div>
-      <div class="feature-grid">
-        <article class="feature"><div class="feature-number">01</div><h3>URL structure</h3><p>Length, redirects, subdomains, IP addresses, and prefix or suffix patterns.</p></article>
-        <article class="feature"><div class="feature-number">02</div><h3>Trust indicators</h3><p>HTTPS tokens, shortening services, DNS records, and statistical reputation signals.</p></article>
-        <article class="feature"><div class="feature-number">03</div><h3>Domain history</h3><p>Domain age and registration information that can reveal suspicious patterns.</p></article>
+      <div class="feature-grid" style="grid-template-columns: repeat(2, 1fr);">
+        <article class="feature"><div class="feature-number">01</div><h3>Length &amp; shape</h3><p>How long the URL, hostname, and path are &mdash; and how much of it is digits.</p></article>
+        <article class="feature"><div class="feature-number">02</div><h3>Composition</h3><p>Counts of telltale characters: dots, hyphens, <code>@</code>, and query symbols.</p></article>
+        <article class="feature"><div class="feature-number">03</div><h3>Structure &amp; tricks</h3><p>Raw-IP hosts, extra subdomains, embedded redirects, and repeated protocol tokens.</p></article>
+        <article class="feature"><div class="feature-number">04</div><h3>Reputation heuristics</h3><p>HTTPS usage, brand-lookalike hyphens, URL shorteners, and phishing keywords.</p></article>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0;">
+      <div class="section-heading">
+        <h2>How well it performs</h2>
+        <p>Trained offline on 2,553 URLs and measured on a held-out 25% test set.</p>
+      </div>
+      <div class="feature-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <article class="feature"><div class="feature-number">ACCURACY</div><h3>89.5%</h3><p>Correct classifications on unseen URLs.</p></article>
+        <article class="feature"><div class="feature-number">ROC AUC</div><h3>0.959</h3><p>Strong separation between legitimate and phishing.</p></article>
+        <article class="feature"><div class="feature-number">CROSS-VAL</div><h3>90.2%</h3><p>5-fold cross-validated accuracy (&plusmn;1.4%).</p></article>
       </div>
     </section>
 
@@ -343,7 +356,7 @@
         </div>
         <div class="steps">
           <article class="step"><div class="step-number">01</div><h3>Enter a URL</h3><p>Provide a complete website URL in the Streamlit scanner.</p></article>
-          <article class="step"><div class="step-number">02</div><h3>Extract signals</h3><p>Convert URL and domain characteristics into numeric features.</p></article>
+          <article class="step"><div class="step-number">02</div><h3>Extract signals</h3><p>Convert the URL text into 20 numeric lexical features.</p></article>
           <article class="step"><div class="step-number">03</div><h3>Run the model</h3><p>Pass the feature vector to the saved Random Forest classifier.</p></article>
           <article class="step"><div class="step-number">04</div><h3>Inspect the result</h3><p>Review the Legitimate or Phishing classification and extracted values.</p></article>
         </div>
@@ -357,8 +370,8 @@
       </div>
       <div class="resources">
         <a class="resource" href="https://github.com/chamanthmvs/Phishing-Website-Detection/blob/master/README.md"><h3>Documentation ↗</h3><p>Setup instructions, project context, and reproducibility notes.</p></a>
-        <a class="resource" href="https://github.com/chamanthmvs/Phishing-Website-Detection/tree/master/notebooks"><h3>Training notebooks ↗</h3><p>Feature extraction and model-training experiments.</p></a>
-        <a class="resource" href="https://github.com/chamanthmvs/Phishing-Website-Detection/tree/master/raw_datasets"><h3>Raw datasets ↗</h3><p>Source URL lists for further experimentation.</p></a>
+        <a class="resource" href="https://github.com/chamanthmvs/Phishing-Website-Detection/tree/master/backend"><h3>Backend API ↗</h3><p>FastAPI service, feature extraction, and the training pipeline.</p></a>
+        <a class="resource" href="https://github.com/chamanthmvs/Phishing-Website-Detection/tree/master/frontend"><h3>Frontend ↗</h3><p>Next.js interface that talks to the backend through its API only.</p></a>
       </div>
     </section>
   </main>

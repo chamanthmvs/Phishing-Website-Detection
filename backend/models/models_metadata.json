@@ -1,0 +1,145 @@
+{
+  "trained_at": "2026-11-08T09:54:22+00:00",
+  "sklearn_version": "1.9.0",
+  "numpy_version": "2.5.2",
+  "python_version": "3.13.15",
+  "random_state": 42,
+  "n_samples": 2553,
+  "n_legitimate": 1560,
+  "n_phishing": 993,
+  "feature_names": [
+    "url_length",
+    "hostname_length",
+    "path_length",
+    "num_dots",
+    "num_hyphens",
+    "num_at",
+    "num_question_marks",
+    "num_ampersand",
+    "num_equals",
+    "num_percent",
+    "num_digits",
+    "num_subdomains",
+    "has_ip",
+    "is_https",
+    "has_http_token",
+    "has_prefix_suffix",
+    "has_shortener",
+    "has_redirection",
+    "has_suspicious_word",
+    "digit_ratio"
+  ],
+  "feature_descriptions": {
+    "url_length": "Total number of characters in the URL.",
+    "hostname_length": "Number of characters in the hostname.",
+    "path_length": "Number of characters in the URL path.",
+    "num_dots": "Count of '.' characters (more dots often means more subdomains).",
+    "num_hyphens": "Count of '-' characters in the URL.",
+    "num_at": "Count of '@' characters (an '@' can hide the real destination).",
+    "num_question_marks": "Count of '?' characters (query parameters).",
+    "num_ampersand": "Count of '&' characters (query parameters).",
+    "num_equals": "Count of '=' characters (query parameters).",
+    "num_percent": "Count of '%' characters (percent-encoding can obscure content).",
+    "num_digits": "Count of digit characters in the URL.",
+    "num_subdomains": "Number of subdomain labels in the hostname.",
+    "has_ip": "1 if the host is a raw IP address instead of a domain name.",
+    "is_https": "1 if the URL uses the https scheme.",
+    "has_http_token": "1 if 'http' appears again after the scheme (a spoofing trick).",
+    "has_prefix_suffix": "1 if the domain contains a '-' (brand look-alike trick).",
+    "has_shortener": "1 if a URL-shortening service is used.",
+    "has_redirection": "1 if '//' appears inside the path (open-redirect pattern).",
+    "has_suspicious_word": "1 if the URL contains a known phishing keyword.",
+    "digit_ratio": "Fraction of the URL made up of digits."
+  },
+  "default_model": "random_forest",
+  "models": {
+    "random_forest": {
+      "display_name": "Random Forest",
+      "metrics": {
+        "test_accuracy": 0.8951,
+        "test_precision": 0.873,
+        "test_recall": 0.8554,
+        "test_f1": 0.8641,
+        "test_roc_auc": 0.9588,
+        "cv5_accuracy_mean": 0.9017,
+        "cv5_accuracy_std": 0.0142,
+        "confusion_matrix": [
+          [
+            359,
+            31
+          ],
+          [
+            36,
+            213
+          ]
+        ]
+      }
+    },
+    "hist_gradient_boosting": {
+      "display_name": "Histogram Gradient Boosting",
+      "metrics": {
+        "test_accuracy": 0.8998,
+        "test_precision": 0.8903,
+        "test_recall": 0.8474,
+        "test_f1": 0.8683,
+        "test_roc_auc": 0.957,
+        "cv5_accuracy_mean": 0.8997,
+        "cv5_accuracy_std": 0.0132,
+        "confusion_matrix": [
+          [
+            364,
+            26
+          ],
+          [
+            38,
+            211
+          ]
+        ]
+      }
+    },
+    "logistic_regression": {
+      "display_name": "Logistic Regression",
+      "metrics": {
+        "test_accuracy": 0.8044,
+        "test_precision": 0.7743,
+        "test_recall": 0.7028,
+        "test_f1": 0.7368,
+        "test_roc_auc": 0.8735,
+        "cv5_accuracy_mean": 0.8096,
+        "cv5_accuracy_std": 0.0156,
+        "confusion_matrix": [
+          [
+            339,
+            51
+          ],
+          [
+            74,
+            175
+          ]
+        ]
+      }
+    }
+  },
+  "feature_importances": {
+    "is_https": 0.0981,
+    "num_dots": 0.0678,
+    "hostname_length": 0.062,
+    "path_length": 0.0394,
+    "url_length": 0.0224,
+    "num_digits": 0.0149,
+    "has_suspicious_word": 0.0144,
+    "digit_ratio": 0.0103,
+    "num_hyphens": 0.0089,
+    "num_subdomains": 0.0088,
+    "has_prefix_suffix": 0.0041,
+    "has_shortener": 0.0014,
+    "num_percent": 0.0003,
+    "has_redirection": 0.0003,
+    "num_at": 0.0002,
+    "num_equals": 0.0002,
+    "num_ampersand": 0.0,
+    "has_ip": 0.0,
+    "has_http_token": 0.0,
+    "num_question_marks": -0.0005
+  }
+}

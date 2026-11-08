@@ -1,0 +1,10 @@
+# Backend runtime dependencies (FastAPI API + model training).
+# Versions are pinned for reproducibility. scikit-learn must match the version
+# the models were trained/pickled with (see models/models_metadata.json);
+# loading a model saved by a different scikit-learn version is unreliable.
+fastapi==0.162.2
+uvicorn[standard]==0.52.4
+pydantic==2.14.3
+scikit-learn==1.9.0
+pandas==3.0.5
+numpy==2.5.2
